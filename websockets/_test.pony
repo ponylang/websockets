@@ -1,8 +1,77 @@
 use "pony_test"
+use "pony_check"
 
 actor \nodoc\ Main is TestList
   new create(env: Env) =>
     PonyTest(env, this)
 
   fun tag tests(test: PonyTest) =>
-    None
+    // UTF-8 validator
+    test(_TestUtf8ValidAscii)
+    test(_TestUtf8ValidEmpty)
+    test(_TestUtf8ValidTwoByte)
+    test(_TestUtf8ValidThreeByte)
+    test(_TestUtf8ValidFourByte)
+    test(_TestUtf8InvalidTruncated)
+    test(_TestUtf8InvalidOverlong)
+    test(_TestUtf8InvalidSurrogate)
+    test(_TestUtf8InvalidAboveMax)
+    test(_TestUtf8InvalidContinuationFirst)
+    test(Property1UnitTest[String](_TestUtf8PropertyValidStrings))
+    test(Property1UnitTest[U8](_TestUtf8PropertyInvalidByte))
+
+    // Frame encoder
+    test(_TestFrameEncoderText)
+    test(_TestFrameEncoderBinary)
+    test(_TestFrameEncoderCloseWithCode)
+    test(_TestFrameEncoderCloseEmpty)
+    test(_TestFrameEncoderPong)
+    test(_TestFrameEncoderLength16Bit)
+    test(_TestFrameEncoderLength64Bit)
+    test(Property1UnitTest[USize](_TestFrameEncoderPropertyRoundtrip))
+
+    // Frame parser
+    test(_TestFrameParserText)
+    test(_TestFrameParserBinary)
+    test(_TestFrameParserPing)
+    test(_TestFrameParserPong)
+    test(_TestFrameParserCloseWithCode)
+    test(_TestFrameParserCloseEmpty)
+    test(_TestFrameParserCloseOneByte)
+    test(_TestFrameParserCloseInvalidUtf8Reason)
+    test(_TestFrameParserCloseValidUtf8Reason)
+    test(_TestFrameParserLength16Bit)
+    test(_TestFrameParserLength64Bit)
+    test(_TestFrameParserUnmasked)
+    test(_TestFrameParserNonZeroRsv)
+    test(_TestFrameParserFragmentedControl)
+    test(_TestFrameParserControlTooLarge)
+    test(_TestFrameParserUnknownOpcode)
+    test(_TestFrameParserIncremental)
+    test(_TestFrameParserMultipleFrames)
+    test(Property1UnitTest[USize](_TestFrameParserPropertyRandom))
+
+    // Handshake parser
+    test(_TestHandshakeValid)
+    test(_TestHandshakeRemainingBytes)
+    test(_TestHandshakeTooLarge)
+    test(_TestHandshakeInvalidMethod)
+    test(_TestHandshakeMissingUpgrade)
+    test(_TestHandshakeWrongVersion)
+    test(_TestHandshakeMissingKey)
+    test(_TestHandshakeCaseInsensitive)
+    test(_TestHandshakeIncremental)
+    test(_TestHandshakeRfc6455AcceptKey)
+    test(_TestHandshakeConnectionMultiToken)
+    test(Property1UnitTest[String](_TestHandshakePropertyValidRequests))
+
+    // Fragment reassembler
+    test(_TestReassemblerSingleText)
+    test(_TestReassemblerSingleBinary)
+    test(_TestReassemblerMultiFragment)
+    test(_TestReassemblerInterleavedData)
+    test(_TestReassemblerMaxSize)
+    test(_TestReassemblerInvalidUtf8)
+    test(_TestReassemblerValidUtf8)
+    test(_TestReassemblerContinuationWithoutStart)
+    test(Property1UnitTest[USize](_TestReassemblerPropertyRoundtrip))
