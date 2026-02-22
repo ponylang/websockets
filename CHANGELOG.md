@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This projec
 
 ### Added
 
+- Add WebSocket server library ([PR #5](https://github.com/ponylang/websockets/pull/5))
 
 ### Changed
 
