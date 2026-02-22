@@ -1,0 +1,14 @@
+{
+  "packages": [
+    "websockets"
+  ],
+  "info": {
+    "description": "WebSockets for Pony",
+    "homepage": "https://github.com/ponylang/websockets",
+    "license": "BSD-2-Clause",
+    "documentation_url": "https://ponylang.github.io/websockets/",
+    "version": "0.0.0",
+    "name": "websockets"
+  },
+  "deps": []
+}
