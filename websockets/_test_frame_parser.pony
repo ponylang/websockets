@@ -434,6 +434,94 @@ class \nodoc\ iso _TestFrameParserMultipleFrames is UnitTest
     | let err: _FrameError => h.fail("unexpected error")
     end
 
+class \nodoc\ iso _TestFrameParserCloseValidCodes is Property1[U16]
+  """Valid close status codes are accepted by the frame parser."""
+  fun name(): String => "frame_parser/close_valid_codes"
+
+  fun gen(): Generator[U16] =>
+    Generators.frequency[U16]([
+      as WeightedGenerator[U16]:
+      (1, Generators.u16(where min = 1000, max = 1003))
+      (1, Generators.u16(where min = 1007, max = 1014))
+      (1, Generators.u16(where min = 3000, max = 4999))
+    ])
+
+  fun property(code: U16, h: PropertyHelper) ? =>
+    let payload: Array[U8] val =
+      recover val [as U8: (code >> 8).u8(); code.u8()] end
+    let frame = _TestFrameHelper.masked_frame(true, 0x08, payload)
+    let parser = _FrameParser
+    match parser.parse(frame)
+    | let frames: Array[_ParsedFrame val] val =>
+      h.assert_eq[USize](1, frames.size())
+      h.assert_eq[U8](0x08, frames(0)?.opcode)
+      h.assert_eq[U8]((code >> 8).u8(), frames(0)?.payload(0)?)
+      h.assert_eq[U8](code.u8(), frames(0)?.payload(1)?)
+    | let err: _FrameError =>
+      h.fail("unexpected error for code " + code.string())
+    end
+
+class \nodoc\ iso _TestFrameParserCloseInvalidCodes is Property1[U16]
+  """Invalid close status codes are rejected by the frame parser."""
+  fun name(): String => "frame_parser/close_invalid_codes"
+
+  fun gen(): Generator[U16] =>
+    Generators.frequency[U16]([
+      as WeightedGenerator[U16]:
+      (1, Generators.u16(where min = 0, max = 999))
+      (1, Generators.u16(where min = 1004, max = 1006))
+      (1, Generators.u16(where min = 1015, max = 2999))
+      (1, Generators.u16(where min = 5000, max = 65535))
+    ])
+
+  fun property(code: U16, h: PropertyHelper) =>
+    let payload: Array[U8] val =
+      recover val [as U8: (code >> 8).u8(); code.u8()] end
+    let frame = _TestFrameHelper.masked_frame(true, 0x08, payload)
+    let parser = _FrameParser
+    match parser.parse(frame)
+    | let frames: Array[_ParsedFrame val] val =>
+      h.fail("expected error for invalid code " + code.string())
+    | let err: _FrameError =>
+      h.assert_is[CloseCode](CloseProtocolError, err.code)
+    end
+
+class \nodoc\ iso _TestFrameParserCloseMixedCodes is Property1[U16]
+  """Close frame parsing succeeds if and only if the code is valid."""
+  fun name(): String => "frame_parser/close_mixed_codes"
+
+  fun gen(): Generator[U16] =>
+    Generators.frequency[U16]([
+      as WeightedGenerator[U16]:
+      // Valid ranges
+      (1, Generators.u16(where min = 1000, max = 1003))
+      (1, Generators.u16(where min = 1007, max = 1014))
+      (1, Generators.u16(where min = 3000, max = 4999))
+      // Invalid ranges
+      (1, Generators.u16(where min = 0, max = 999))
+      (1, Generators.u16(where min = 1004, max = 1006))
+      (1, Generators.u16(where min = 1015, max = 2999))
+      (1, Generators.u16(where min = 5000, max = 65535))
+    ])
+
+  fun property(code: U16, h: PropertyHelper) =>
+    let valid =
+      if (code >= 1000) and (code <= 1003) then true
+      elseif (code >= 1007) and (code <= 1014) then true
+      elseif (code >= 3000) and (code <= 4999) then true
+      else false
+      end
+    let payload: Array[U8] val =
+      recover val [as U8: (code >> 8).u8(); code.u8()] end
+    let frame = _TestFrameHelper.masked_frame(true, 0x08, payload)
+    let parser = _FrameParser
+    match parser.parse(frame)
+    | let frames: Array[_ParsedFrame val] val =>
+      h.assert_true(valid, "code " + code.string() + " should be rejected")
+    | let err: _FrameError =>
+      h.assert_false(valid, "code " + code.string() + " should be accepted")
+    end
+
 class \nodoc\ iso _TestFrameParserPropertyRandom is Property1[USize]
   """Random valid masked frames parse successfully."""
   fun name(): String => "frame_parser/property_random_frames"

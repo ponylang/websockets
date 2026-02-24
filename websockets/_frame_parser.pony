@@ -129,6 +129,13 @@ class _FrameParser
         if payload.size() == 1 then
           return _FrameError(CloseProtocolError)
         end
+        // Validate close status code per RFC 6455 Section 7.4.1
+        if payload.size() >= 2 then
+          let code = (payload(0)?.u16() << 8) or payload(1)?.u16()
+          if not _valid_close_code(code) then
+            return _FrameError(CloseProtocolError)
+          end
+        end
         // Validate close reason is valid UTF-8
         if payload.size() > 2 then
           let reason_s = String(payload.size() - 2)
@@ -168,6 +175,14 @@ class _FrameParser
     | 0x08 => true // Close
     | 0x09 => true // Ping
     | 0x0A => true // Pong
+    else false
+    end
+
+  fun _valid_close_code(code: U16): Bool =>
+    """Check if a close status code is valid to receive per RFC 6455."""
+    if (code >= 1000) and (code <= 1003) then true
+    elseif (code >= 1007) and (code <= 1014) then true
+    elseif (code >= 3000) and (code <= 4999) then true
     else false
     end
 

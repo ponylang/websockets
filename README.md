@@ -1,6 +1,6 @@
 # websockets
 
-WebSockets for Pony.
+A WebSocket server library for Pony, implementing the [WebSocket protocol](https://www.rfc-editor.org/rfc/rfc6455).
 
 ## Status
 
