@@ -119,6 +119,29 @@ class \nodoc\ iso _TestHandshakeInvalidMethod is UnitTest
     | let err: HandshakeError => h.fail("wrong error: " + err.string())
     end
 
+class \nodoc\ iso _TestHandshakeMissingHost is UnitTest
+  """Missing Host header produces HandshakeMissingHost."""
+  fun name(): String => "handshake/missing_host"
+
+  fun apply(h: TestHelper) =>
+    let request: Array[U8] iso = recover iso
+      let s = String(256)
+        .>append("GET / HTTP/1.1\r\n")
+        .>append("Upgrade: websocket\r\n")
+        .>append("Connection: Upgrade\r\n")
+        .>append("Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n")
+        .>append("Sec-WebSocket-Version: 13\r\n")
+        .>append("\r\n")
+      s.clone().iso_array()
+    end
+    let parser = _HandshakeParser
+    match parser(consume request, 8192)
+    | HandshakeMissingHost => None // expected
+    | _HandshakeNeedMore => h.fail("expected error")
+    | let _: _HandshakeResult => h.fail("expected error")
+    | let err: HandshakeError => h.fail("wrong error: " + err.string())
+    end
+
 class \nodoc\ iso _TestHandshakeMissingUpgrade is UnitTest
   """Missing Upgrade header produces HandshakeMissingUpgrade."""
   fun name(): String => "handshake/missing_upgrade"

@@ -2,6 +2,7 @@
 type HandshakeError is
   ( HandshakeRequestTooLarge
   | HandshakeInvalidHTTP
+  | HandshakeMissingHost
   | HandshakeMissingUpgrade
   | HandshakeWrongVersion
   | HandshakeMissingKey )
@@ -15,6 +16,11 @@ primitive HandshakeInvalidHTTP is Stringable
   """The HTTP request line was malformed or not a GET request."""
   fun string(): String iso^ =>
     "Invalid HTTP request".clone()
+
+primitive HandshakeMissingHost is Stringable
+  """The required Host header was missing."""
+  fun string(): String iso^ =>
+    "Missing Host header".clone()
 
 primitive HandshakeMissingUpgrade is Stringable
   """
