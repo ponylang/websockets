@@ -45,6 +45,7 @@ actor \nodoc\ Main is TestList
     test(Property1UnitTest[U16](_TestFrameParserCloseMixedCodes))
     test(_TestFrameParserLength16Bit)
     test(_TestFrameParserLength64Bit)
+    test(_TestFrameParserLength64BitMsbSet)
     test(_TestFrameParserUnmasked)
     test(_TestFrameParserNonZeroRsv)
     test(_TestFrameParserFragmentedControl)
