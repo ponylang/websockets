@@ -98,13 +98,16 @@ class _HandshakeParser
       end
 
       // Validate required WebSocket headers
+      var has_host = false
       var has_upgrade = false
       var has_connection_upgrade = false
       var websocket_key: (String val | None) = None
       var websocket_version: (String val | None) = None
 
       for (name, value) in headers.values() do
-        if name == "upgrade" then
+        if name == "host" then
+          has_host = true
+        elseif name == "upgrade" then
           let value_lower: String val = value.lower()
           if value_lower == "websocket" then
             has_upgrade = true
@@ -126,6 +129,7 @@ class _HandshakeParser
         end
       end
 
+      if not has_host then return HandshakeMissingHost end
       if not has_upgrade then return HandshakeMissingUpgrade end
       if not has_connection_upgrade then return HandshakeMissingUpgrade end
 

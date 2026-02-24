@@ -60,6 +60,7 @@ actor \nodoc\ Main is TestList
     test(_TestHandshakeRemainingBytes)
     test(_TestHandshakeTooLarge)
     test(_TestHandshakeInvalidMethod)
+    test(_TestHandshakeMissingHost)
     test(_TestHandshakeMissingUpgrade)
     test(_TestHandshakeWrongVersion)
     test(_TestHandshakeMissingKey)
