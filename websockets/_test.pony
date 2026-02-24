@@ -64,11 +64,15 @@ actor \nodoc\ Main is TestList
     test(_TestHandshakeMissingUpgrade)
     test(_TestHandshakeWrongVersion)
     test(_TestHandshakeMissingKey)
+    test(_TestHandshakeInvalidKeyBadBase64)
+    test(_TestHandshakeInvalidKeyWrongLength)
     test(_TestHandshakeCaseInsensitive)
     test(_TestHandshakeIncremental)
     test(_TestHandshakeRfc6455AcceptKey)
     test(_TestHandshakeConnectionMultiToken)
     test(Property1UnitTest[String](_TestHandshakePropertyValidRequests))
+    test(Property1UnitTest[String](_TestHandshakePropertyValidKeys))
+    test(Property1UnitTest[String](_TestHandshakePropertyInvalidKeyLength))
 
     // Fragment reassembler
     test(_TestReassemblerSingleText)

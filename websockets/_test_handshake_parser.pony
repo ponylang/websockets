@@ -212,6 +212,36 @@ class \nodoc\ iso _TestHandshakeMissingKey is UnitTest
     | let err: HandshakeError => h.fail("wrong error: " + err.string())
     end
 
+class \nodoc\ iso _TestHandshakeInvalidKeyBadBase64 is UnitTest
+  """Key with non-base64 characters produces HandshakeInvalidKey."""
+  fun name(): String => "handshake/invalid_key_bad_base64"
+
+  fun apply(h: TestHelper) =>
+    let data = _TestHandshakeHelper.valid_request(
+      where key = "!!!invalid-key!!!!!!!!!==")
+    let parser = _HandshakeParser
+    match parser(consume data, 8192)
+    | HandshakeInvalidKey => None // expected
+    | _HandshakeNeedMore => h.fail("expected error")
+    | let _: _HandshakeResult => h.fail("expected error")
+    | let err: HandshakeError => h.fail("wrong error: " + err.string())
+    end
+
+class \nodoc\ iso _TestHandshakeInvalidKeyWrongLength is UnitTest
+  """Valid base64 that decodes to != 16 bytes produces HandshakeInvalidKey."""
+  fun name(): String => "handshake/invalid_key_wrong_length"
+
+  fun apply(h: TestHelper) =>
+    // "dGVzdA==" is base64 for "test" (4 bytes)
+    let data = _TestHandshakeHelper.valid_request(where key = "dGVzdA==")
+    let parser = _HandshakeParser
+    match parser(consume data, 8192)
+    | HandshakeInvalidKey => None // expected
+    | _HandshakeNeedMore => h.fail("expected error")
+    | let _: _HandshakeResult => h.fail("expected error")
+    | let err: HandshakeError => h.fail("wrong error: " + err.string())
+    end
+
 class \nodoc\ iso _TestHandshakeCaseInsensitive is UnitTest
   """Header values are matched case-insensitively."""
   fun name(): String => "handshake/case_insensitive"
@@ -345,4 +375,53 @@ class \nodoc\ iso _TestHandshakePropertyValidRequests is Property1[String]
       h.fail("expected result for uri: " + test_uri)
     | let err: HandshakeError =>
       h.fail("unexpected error for uri: " + test_uri)
+    end
+
+class \nodoc\ iso _TestHandshakePropertyValidKeys is Property1[String]
+  """
+  Random 16-byte keys, base64-encoded, always produce a successful
+  handshake.
+  """
+  fun name(): String => "handshake/property_valid_keys"
+
+  fun gen(): Generator[String] =>
+    Generators.byte_string(Generators.u8() where min = 16, max = 16)
+
+  fun property(raw_key: String, h: PropertyHelper) =>
+    let key: String val = Base64.encode(raw_key)
+    let data = _TestHandshakeHelper.valid_request(where key = key)
+    let parser = _HandshakeParser
+    match parser(consume data, 8192)
+    | let result: _HandshakeResult => None // success expected
+    | _HandshakeNeedMore =>
+      h.fail("expected result for key: " + key)
+    | let err: HandshakeError =>
+      h.fail("unexpected error for key: " + key + " — " + err.string())
+    end
+
+class \nodoc\ iso _TestHandshakePropertyInvalidKeyLength is Property1[String]
+  """
+  Random byte strings of length != 16, base64-encoded, always produce
+  HandshakeInvalidKey.
+  """
+  fun name(): String => "handshake/property_invalid_key_length"
+
+  fun gen(): Generator[String] =>
+    // Generate lengths 1-15 and 17-32, excluding 16
+    let short = Generators.byte_string(Generators.u8() where min = 0, max = 15)
+    let long = Generators.byte_string(Generators.u8() where min = 17, max = 32)
+    short.union[String](long)
+
+  fun property(raw_key: String, h: PropertyHelper) =>
+    let key: String val = Base64.encode(raw_key)
+    let data = _TestHandshakeHelper.valid_request(where key = key)
+    let parser = _HandshakeParser
+    match parser(consume data, 8192)
+    | HandshakeInvalidKey => None // expected
+    | _HandshakeNeedMore =>
+      h.fail("expected HandshakeInvalidKey for key: " + key)
+    | let _: _HandshakeResult =>
+      h.fail("expected HandshakeInvalidKey but got success for key: " + key)
+    | let err: HandshakeError =>
+      h.fail("wrong error for key: " + key + " — " + err.string())
     end
