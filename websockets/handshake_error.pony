@@ -5,7 +5,8 @@ type HandshakeError is
   | HandshakeMissingHost
   | HandshakeMissingUpgrade
   | HandshakeWrongVersion
-  | HandshakeMissingKey )
+  | HandshakeMissingKey
+  | HandshakeInvalidKey )
 
 primitive HandshakeRequestTooLarge is Stringable
   """The HTTP upgrade request exceeded the maximum allowed size."""
@@ -39,3 +40,11 @@ primitive HandshakeMissingKey is Stringable
   """The Sec-WebSocket-Key header was missing."""
   fun string(): String iso^ =>
     "Missing Sec-WebSocket-Key header".clone()
+
+primitive HandshakeInvalidKey is Stringable
+  """
+  The Sec-WebSocket-Key header was not a valid base64-encoded
+  16-byte value.
+  """
+  fun string(): String iso^ =>
+    "Invalid Sec-WebSocket-Key (must be base64-encoded 16 bytes)".clone()

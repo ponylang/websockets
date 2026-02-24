@@ -141,6 +141,13 @@ class _HandshakeParser
 
       match websocket_key
       | let key: String val =>
+        let decoded_size =
+          try
+            Base64.decode[Array[U8] iso](key)?.size()
+          else
+            return HandshakeInvalidKey
+          end
+        if decoded_size != 16 then return HandshakeInvalidKey end
         let accept_key = _compute_accept_key(key)
 
         // Extract remaining bytes after \r\n\r\n using String
