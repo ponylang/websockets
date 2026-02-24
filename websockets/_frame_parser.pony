@@ -83,6 +83,10 @@ class _FrameParser
       elseif payload_len == 127 then
         header_size = 10
         if _buf.size() < header_size then return None end
+        // RFC 6455 Section 5.2: MSB of 64-bit payload length must be 0
+        if (_buf(2)? and 0x80) != 0 then
+          return _FrameError(CloseProtocolError)
+        end
         payload_len =
           (_buf(2)?.usize() << 56) or
           (_buf(3)?.usize() << 48) or

@@ -288,6 +288,34 @@ class \nodoc\ iso _TestFrameParserLength64Bit is UnitTest
     | let err: _FrameError => h.fail("unexpected error")
     end
 
+class \nodoc\ iso _TestFrameParserLength64BitMsbSet is UnitTest
+  """64-bit payload length with MSB set is rejected per RFC 6455."""
+  fun name(): String => "frame_parser/length_64bit_msb_set"
+
+  fun apply(h: TestHelper) =>
+    // Manually build a masked frame with 64-bit length whose MSB is set.
+    // The 8-byte extended length is [0x80 0x00 0x00 0x00 0x00 0x01 0x00 0x00],
+    // which has bit 63 set. This must be rejected before attempting to read
+    // that many payload bytes.
+    let raw: Array[U8] val = recover val
+      let f = Array[U8]
+      f.push(0x80 or 0x02) // FIN + binary
+      f.push(0x80 or 127)  // MASK + 64-bit length indicator
+      // 8-byte extended length with MSB set
+      f.>push(0x80).>push(0x00).>push(0x00).>push(0x00)
+        .>push(0x00).>push(0x01).>push(0x00).push(0x00)
+      // Mask key
+      f.>push(0x00).>push(0x00).>push(0x00).push(0x00)
+      f
+    end
+    let parser = _FrameParser
+    match parser.parse(raw)
+    | let frames: Array[_ParsedFrame val] val =>
+      h.fail("expected error for 64-bit length with MSB set")
+    | let err: _FrameError =>
+      h.assert_is[CloseCode](CloseProtocolError, err.code)
+    end
+
 class \nodoc\ iso _TestFrameParserUnmasked is UnitTest
   """Unmasked client frame is rejected."""
   fun name(): String => "frame_parser/unmasked_rejected"
