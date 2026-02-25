@@ -14,7 +14,7 @@ websockets is beta quality software that will change frequently. Expect breaking
 * `use "websockets"` to include this package
 * `corral run -- ponyc` to compile your application
 
-You'll need OpenSSL installed on your system. For details, see the [ssl package](https://github.com/ponylang/ssl#installation).
+This library has a transitive dependency on [ponylang/ssl](https://github.com/ponylang/ssl). It requires a C SSL library to be installed. Please see the [ssl installation instructions](https://github.com/ponylang/ssl?tab=readme-ov-file#installation) for more information.
 
 ## Usage
 
