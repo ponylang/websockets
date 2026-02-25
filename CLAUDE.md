@@ -19,7 +19,7 @@ make build-examples ssl=3.0.x # Just examples
 Import aliases used consistently across the codebase:
 - `use lori = "lori"`
 - `use crypto = "ssl/crypto"`
-- `use ssl_net = "ssl/net"` (only in `websocket_server.pony`)
+- `use ssl_net = "ssl/net"` (only in `web_socket_server.pony`)
 - `use "encode/base64"` (unqualified)
 
 ## Architecture
@@ -58,13 +58,13 @@ _Handshaking → _Open → _Closing → _Closed
 | `_close_status_extractor.pony` | `_CloseStatusExtractor` | Extracts `(CloseStatus, String val)` from raw close frame payload |
 | `_utf8_validator.pony` | `_Utf8Validator` | UTF-8 byte sequence validation |
 | `_connection_state.pony` | `_ConnectionState` | State machine trait + four state classes |
-| `_mort.pony` | `_Unreachable` | Crash-on-bug helper for impossible code paths |
+| `_unreachable.pony` | `_Unreachable` | Crash-on-bug helper for impossible code paths |
 
 ## Naming Conventions
 
 - `_` prefix on type names = package-private (visible within `mare/` package, not to consumers)
 - `_` prefix on members = type-private (only accessible within the defining type)
-- File names match the primary type they contain (e.g., `websocket_server.pony` contains `WebSocketServer`)
+- File names match the primary type they contain (e.g., `web_socket_server.pony` contains `WebSocketServer`)
 
 ## Test Patterns
 

@@ -152,7 +152,8 @@ class \nodoc\ iso _TestFrameEncoderPropertyRoundtrip is Property1[USize]
 
     // To parse through _FrameParser, we need to mask the frame
     // (client-to-server). Build a masked version.
-    let mask_key: Array[U8] val = recover val [as U8: 0x37; 0xFA; 0x21; 0x3D] end
+    let mask_key: Array[U8] val =
+      recover val [as U8: 0x37; 0xFA; 0x21; 0x3D] end
     let masked = _mask_frame(frame, mask_key)?
 
     // Parse

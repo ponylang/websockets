@@ -11,16 +11,19 @@ type HandshakeError is
 primitive HandshakeRequestTooLarge is Stringable
   """The HTTP upgrade request exceeded the maximum allowed size."""
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Handshake request too large".clone()
 
 primitive HandshakeInvalidHTTP is Stringable
   """The HTTP request line was malformed or not a GET request."""
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Invalid HTTP request".clone()
 
 primitive HandshakeMissingHost is Stringable
   """The required Host header was missing."""
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Missing Host header".clone()
 
 primitive HandshakeMissingUpgrade is Stringable
@@ -29,16 +32,19 @@ primitive HandshakeMissingUpgrade is Stringable
   incorrect values.
   """
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Missing or invalid Upgrade/Connection headers".clone()
 
 primitive HandshakeWrongVersion is Stringable
   """The Sec-WebSocket-Version header was not 13."""
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Wrong WebSocket version (expected 13)".clone()
 
 primitive HandshakeMissingKey is Stringable
   """The Sec-WebSocket-Key header was missing."""
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Missing Sec-WebSocket-Key header".clone()
 
 primitive HandshakeInvalidKey is Stringable
@@ -47,4 +53,5 @@ primitive HandshakeInvalidKey is Stringable
   16-byte value.
   """
   fun string(): String iso^ =>
+    """Returns a human-readable description of this error."""
     "Invalid Sec-WebSocket-Key (must be base64-encoded 16 bytes)".clone()
