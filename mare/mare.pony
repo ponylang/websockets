@@ -108,9 +108,10 @@ Override any of these on your `WebSocketServerActor`:
 - `on_open(request)` — connection established
 - `on_text_message(data)` — complete text message received
 - `on_binary_message(data)` — complete binary message received
-- `on_closed(close_status, close_reason)` — connection closed; `close_status`
-  is a `CloseStatus` indicating why (e.g., `CloseNormal`, `CloseAbnormalClosure`),
-  `close_reason` is the UTF-8 reason string from the close frame (or empty)
+- `on_closed(close_status, close_reason)` — connection closed;
+  `close_status` is a `CloseStatus` indicating why
+  (e.g., `CloseNormal`, `CloseAbnormalClosure`), `close_reason` is
+  the UTF-8 reason string from the close frame (or empty)
 - `on_throttled()` / `on_unthrottled()` — backpressure signals
 
 ## Sending Messages
