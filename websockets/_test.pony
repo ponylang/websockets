@@ -74,6 +74,19 @@ actor \nodoc\ Main is TestList
     test(Property1UnitTest[String](_TestHandshakePropertyValidKeys))
     test(Property1UnitTest[String](_TestHandshakePropertyInvalidKeyLength))
 
+    // Close status extractor
+    test(_TestExtractorEmptyPayload)
+    test(_TestExtractorStandardCode)
+    test(_TestExtractorCodeWithReason)
+    test(_TestExtractorApplicationCode)
+    test(_TestExtractorAllNamedCodes)
+    test(_TestCloseNoStatusReceivedType)
+    test(_TestCloseAbnormalClosureType)
+    test(_TestOtherCloseCodeType)
+    test(Property1UnitTest[U16](_TestExtractorPropertyNamedCodes))
+    test(Property1UnitTest[U16](_TestExtractorPropertyOtherCodes))
+    test(Property1UnitTest[U16](_TestExtractorPropertyRoundtrip))
+
     // Fragment reassembler
     test(_TestReassemblerSingleText)
     test(_TestReassemblerSingleBinary)

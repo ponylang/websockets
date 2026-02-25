@@ -73,7 +73,7 @@ primitive _Open is _ConnectionState
 
   fun on_closed(server: WebSocketServer ref) =>
     // Abnormal TCP close
-    server._fire_on_closed()
+    server._fire_on_closed(CloseAbnormalClosure, "")
     server._set_state(_Closed)
 
   fun on_throttled(server: WebSocketServer ref) =>
@@ -112,7 +112,7 @@ primitive _Closing is _ConnectionState
 
   fun on_closed(server: WebSocketServer ref) =>
     // TCP dropped before close response
-    server._fire_on_closed()
+    server._fire_on_closed(CloseAbnormalClosure, "")
     server._set_state(_Closed)
 
   fun on_throttled(server: WebSocketServer ref) => None
