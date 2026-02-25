@@ -15,8 +15,12 @@ primitive CloseNoStatusReceived is Stringable
   Indicates the close frame had no payload. This is an indicator code that
   must never appear on the wire — it exists only for the application callback.
   """
-  fun code(): U16 => 1005
-  fun string(): String iso^ => "1005 No Status Received".clone()
+  fun code(): U16 =>
+    """Returns the RFC 6455 numeric close code."""
+    1005
+  fun string(): String iso^ =>
+    """Returns a human-readable representation including the code and name."""
+    "1005 No Status Received".clone()
 
 primitive CloseAbnormalClosure is Stringable
   """
@@ -26,8 +30,12 @@ primitive CloseAbnormalClosure is Stringable
   indicator code that must never appear on the wire — it exists only for the
   application callback.
   """
-  fun code(): U16 => 1006
-  fun string(): String iso^ => "1006 Abnormal Closure".clone()
+  fun code(): U16 =>
+    """Returns the RFC 6455 numeric close code."""
+    1006
+  fun string(): String iso^ =>
+    """Returns a human-readable representation including the code and name."""
+    "1006 Abnormal Closure".clone()
 
 class val OtherCloseCode is Stringable
   """
@@ -40,9 +48,13 @@ class val OtherCloseCode is Stringable
   let _code: U16
 
   new val create(code': U16) =>
+    """Create an OtherCloseCode wrapping the given numeric code."""
     _code = code'
 
-  fun code(): U16 => _code
+  fun code(): U16 =>
+    """Returns the raw numeric close code."""
+    _code
 
   fun string(): String iso^ =>
+    """Returns a human-readable representation including the numeric code."""
     (_code.string() + " Other").clone()
