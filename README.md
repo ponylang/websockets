@@ -1,17 +1,17 @@
-# websockets
+# mare
 
 A WebSocket server library for Pony, implementing [RFC 6455](https://www.rfc-editor.org/rfc/rfc6455).
 
 ## Status
 
-websockets is beta quality software that will change frequently. Expect breaking changes. That said, you should feel comfortable using it in your projects.
+mare is beta quality software that will change frequently. Expect breaking changes. That said, you should feel comfortable using it in your projects.
 
 ## Installation
 
 * Install [corral](https://github.com/ponylang/corral)
-* `corral add github.com/ponylang/websockets.git --version 0.0.0`
+* `corral add github.com/ponylang/mare.git --version 0.0.0`
 * `corral fetch` to fetch your dependencies
-* `use "websockets"` to include this package
+* `use "mare"` to include this package
 * `corral run -- ponyc` to compile your application
 
 This library has a transitive dependency on [ponylang/ssl](https://github.com/ponylang/ssl). It requires a C SSL library to be installed. Please see the [ssl installation instructions](https://github.com/ponylang/ssl?tab=readme-ov-file#installation) for more information.
@@ -22,7 +22,7 @@ Here's a complete echo server that sends back every message it receives:
 
 ```pony
 use lori = "lori"
-use ws = "websockets"
+use ws = "mare"
 
 actor Main
   new create(env: Env) =>
@@ -94,4 +94,4 @@ More examples are in the [examples](examples/) directory.
 
 ## API Documentation
 
-[https://ponylang.github.io/websockets](https://ponylang.github.io/websockets)
+[https://ponylang.github.io/mare](https://ponylang.github.io/mare)

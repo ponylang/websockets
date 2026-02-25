@@ -1,4 +1,4 @@
-# WebSocket Server Library
+# Mare — WebSocket Server Library
 
 ## Building
 
@@ -62,13 +62,13 @@ _Handshaking → _Open → _Closing → _Closed
 
 ## Naming Conventions
 
-- `_` prefix on type names = package-private (visible within `websockets/` package, not to consumers)
+- `_` prefix on type names = package-private (visible within `mare/` package, not to consumers)
 - `_` prefix on members = type-private (only accessible within the defining type)
 - File names match the primary type they contain (e.g., `websocket_server.pony` contains `WebSocketServer`)
 
 ## Test Patterns
 
-Tests are in `websockets/_test*.pony` files, registered in `_test.pony`. Mix of:
+Tests are in `mare/_test*.pony` files, registered in `_test.pony`. Mix of:
 - **Example-based unit tests** for specific scenarios (valid input, each error case, boundary conditions)
 - **PonyCheck property tests** for invariants over generated inputs (roundtrip encoding, valid input acceptance, fragment reassembly)
 
