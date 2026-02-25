@@ -5,7 +5,7 @@ Connect with any WebSocket client (e.g., websocat, browser JS) to
 ws://localhost:8080 and messages will be echoed back.
 """
 use lori = "lori"
-use ws = "../../websockets"
+use ws = "../../mare"
 
 actor Main
   new create(env: Env) =>

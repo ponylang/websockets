@@ -1,14 +1,14 @@
 {
   "packages": [
-    "websockets"
+    "mare"
   ],
   "info": {
-    "description": "WebSockets for Pony",
-    "homepage": "https://github.com/ponylang/websockets",
+    "description": "WebSocket server library for Pony",
+    "homepage": "https://github.com/ponylang/mare",
     "license": "BSD-2-Clause",
-    "documentation_url": "https://ponylang.github.io/websockets/",
+    "documentation_url": "https://ponylang.github.io/mare/",
     "version": "0.0.0",
-    "name": "websockets"
+    "name": "mare"
   },
   "deps": [
     {

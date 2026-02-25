@@ -1,5 +1,5 @@
 """
-# WebSockets
+# Mare
 
 A WebSocket server library for Pony built on
 [lori](https://github.com/ponylang/lori).
@@ -24,7 +24,7 @@ A minimal echo server:
 
 ```pony
 use lori = "lori"
-use "websockets"
+use "mare"
 
 actor Main
   new create(env: Env) =>

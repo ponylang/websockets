@@ -1,19 +1,19 @@
-# How to cut a websockets release
+# How to cut a mare release
 
-This document is aimed at members of the Pony team who might be cutting a release of websockets. It serves as a checklist that can take you through doing a release step-by-step.
+This document is aimed at members of the Pony team who might be cutting a release of mare. It serves as a checklist that can take you through doing a release step-by-step.
 
 ## Prerequisites
 
-You must have commit access to the websockets repository
+You must have commit access to the mare repository
 
 ## Releasing
 
-Please note that this document was written with the assumption that you are using a clone of the `websockets` repo. You have to be using a clone rather than a fork. It is advised to your do this by making a fresh clone of the `websockets` repo from which you will release.
+Please note that this document was written with the assumption that you are using a clone of the `mare` repo. You have to be using a clone rather than a fork. It is advised to your do this by making a fresh clone of the `mare` repo from which you will release.
 
 ```bash
-git clone git@github.com:ponylang/websockets.git \
-  websockets-release-clean
-cd websockets-release-clean
+git clone git@github.com:ponylang/mare.git \
+  mare-release-clean
+cd mare-release-clean
 ```
 
 Before getting started, you will need a number for the version that you will be releasing as well as an agreed upon "golden commit" that will form the basis of the release.
