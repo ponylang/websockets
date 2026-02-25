@@ -40,8 +40,22 @@ trait WebSocketLifecycleEventReceiver
     """Called when a complete binary message is received."""
     None
 
-  fun ref on_closed() =>
-    """Called when the WebSocket connection closes."""
+  fun ref on_closed(
+    close_status: CloseStatus,
+    close_reason: String val)
+  =>
+    """
+    Called when the WebSocket connection closes.
+
+    `close_status` indicates why the connection closed — a named primitive
+    for standard codes (e.g., `CloseNormal`), `CloseNoStatusReceived` when
+    the close frame had no payload, `CloseAbnormalClosure` when TCP dropped
+    without a close handshake, or `OtherCloseCode` for application-defined
+    or IANA-registered codes without named primitives.
+
+    `close_reason` is the UTF-8 reason string from the close frame, or
+    empty when no reason was provided or the close was abnormal.
+    """
     None
 
   fun ref on_throttled() =>

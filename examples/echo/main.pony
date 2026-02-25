@@ -68,5 +68,9 @@ actor EchoHandler is ws.WebSocketServerActor
     _out.print("Binary: " + data.size().string() + " bytes")
     _ws.send_binary(data)
 
-  fun ref on_closed() =>
-    _out.print("Client disconnected")
+  fun ref on_closed(
+    close_status: ws.CloseStatus,
+    close_reason: String val)
+  =>
+    _out.print("Client disconnected: " + close_status.string()
+      + if close_reason.size() > 0 then " (" + close_reason + ")" else "" end)

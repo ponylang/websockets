@@ -195,7 +195,7 @@ class WebSocketServer is lori.ServerLifecycleEventReceiver
       end
     | let err: _FrameError =>
       _send_frame(_FrameEncoder.close(err.code))
-      _fire_on_closed()
+      _fire_on_closed(err.code, "")
       _tcp_connection.close()
       _state = _Closed
     end
@@ -209,7 +209,9 @@ class WebSocketServer is lori.ServerLifecycleEventReceiver
         match frame.opcode
         | 0x08 =>
           // Close response received — complete the close handshake
-          _fire_on_closed()
+          (let status, let reason) =
+            _CloseStatusExtractor.from_payload(frame.payload)
+          _fire_on_closed(status, reason)
           _tcp_connection.close()
           _state = _Closed
           return
@@ -222,7 +224,7 @@ class WebSocketServer is lori.ServerLifecycleEventReceiver
         end
       end
     | let err: _FrameError =>
-      _fire_on_closed()
+      _fire_on_closed(err.code, "")
       _tcp_connection.close()
       _state = _Closed
     end
@@ -243,7 +245,9 @@ class WebSocketServer is lori.ServerLifecycleEventReceiver
       else
         _send_frame(_FrameEncoder.close_empty())
       end
-      _fire_on_closed()
+      (let status, let reason) =
+        _CloseStatusExtractor.from_payload(frame.payload)
+      _fire_on_closed(status, reason)
       _tcp_connection.close()
       _state = _Closed
     else
@@ -264,7 +268,7 @@ class WebSocketServer is lori.ServerLifecycleEventReceiver
       | _FragmentContinue => None
       | let err: _ReassemblyError =>
         _send_frame(_FrameEncoder.close(err.code))
-        _fire_on_closed()
+        _fire_on_closed(err.code, "")
         _tcp_connection.close()
         _state = _Closed
       end
@@ -328,9 +332,13 @@ class WebSocketServer is lori.ServerLifecycleEventReceiver
     | None => _Unreachable()
     end
 
-  fun ref _fire_on_closed() =>
+  fun ref _fire_on_closed(
+    close_status: CloseStatus,
+    close_reason: String val)
+  =>
     match _lifecycle_event_receiver
-    | let r: WebSocketLifecycleEventReceiver ref => r.on_closed()
+    | let r: WebSocketLifecycleEventReceiver ref =>
+      r.on_closed(close_status, close_reason)
     | None => _Unreachable()
     end
 

@@ -130,6 +130,9 @@ class _FrameParser
 
       // Validate close frame payload
       if opcode == 0x08 then
+        // Coupling: _CloseStatusExtractor.from_payload assumes close payloads
+        // are either empty or >= 2 bytes. Removing this check would cause the
+        // extractor to mishandle 1-byte payloads.
         if payload.size() == 1 then
           return _FrameError(CloseProtocolError)
         end
@@ -184,6 +187,9 @@ class _FrameParser
 
   fun _valid_close_code(code: U16): Bool =>
     """Check if a close status code is valid to receive per RFC 6455."""
+    // Coupling: _CloseStatusExtractor._code_to_status must stay in sync with
+    // these valid code ranges. Adding new ranges here means adding
+    // corresponding match arms in the extractor.
     if (code >= 1000) and (code <= 1003) then true
     elseif (code >= 1007) and (code <= 1014) then true
     elseif (code >= 3000) and (code <= 4999) then true

@@ -55,6 +55,7 @@ _Handshaking → _Open → _Closing → _Closed
 | `_frame_parser.pony` | `_FrameParser` | Incremental WebSocket frame parser with masking, length decoding, validation |
 | `_frame_encoder.pony` | `_FrameEncoder` | Builds outgoing server frames (never masked) |
 | `_fragment_reassembler.pony` | `_FragmentReassembler` | Reassembles fragmented messages, enforces size limits, validates UTF-8 for text |
+| `_close_status_extractor.pony` | `_CloseStatusExtractor` | Extracts `(CloseStatus, String val)` from raw close frame payload |
 | `_utf8_validator.pony` | `_Utf8Validator` | UTF-8 byte sequence validation |
 | `_connection_state.pony` | `_ConnectionState` | State machine trait + four state classes |
 | `_mort.pony` | `_Unreachable` | Crash-on-bug helper for impossible code paths |
