@@ -1,6 +1,6 @@
 # mare
 
-A WebSocket server library for Pony, implementing [RFC 6455](https://www.rfc-editor.org/rfc/rfc6455).
+A WebSocket server for Pony, implementing [RFC 6455](https://www.rfc-editor.org/rfc/rfc6455).
 
 ## Status
 
@@ -14,7 +14,7 @@ mare is beta quality software that will change frequently. Expect breaking chang
 * `use "mare"` to include this package
 * `corral run -- ponyc` to compile your application
 
-This library has a transitive dependency on [ponylang/ssl](https://github.com/ponylang/ssl). It requires a C SSL library to be installed. Please see the [ssl installation instructions](https://github.com/ponylang/ssl?tab=readme-ov-file#installation) for more information.
+Mare has a transitive dependency on [ponylang/ssl](https://github.com/ponylang/ssl). It requires a C SSL library to be installed. Please see the [ssl installation instructions](https://github.com/ponylang/ssl?tab=readme-ov-file#installation) for more information.
 
 ## Usage
 

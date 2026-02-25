@@ -3,7 +3,7 @@
     "mare"
   ],
   "info": {
-    "description": "WebSocket server library for Pony",
+    "description": "WebSocket server for Pony",
     "homepage": "https://github.com/ponylang/mare",
     "license": "BSD-2-Clause",
     "documentation_url": "https://ponylang.github.io/mare/",

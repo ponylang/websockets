@@ -1,4 +1,4 @@
-# Mare — WebSocket Server Library
+# Mare — WebSocket Server
 
 ## Building
 
@@ -77,5 +77,5 @@ Tests run sequentially with `--exclude=integration` (no integration tests in v1)
 ## Design Decisions
 
 - **Close timeout deferred**: The design specifies a close handshake timeout, but it's omitted from v1. Lori's idle timeout resets on any TCP receive, making it unreliable for close timeouts. OS TCP timeout handles the degenerate case.
-- **Send errors silently dropped**: `_tcp_connection.send()` errors (`SendErrorNotConnected`, `SendErrorNotWriteable`) are ignored — the library can't do anything useful in either case.
+- **Send errors silently dropped**: `_tcp_connection.send()` errors (`SendErrorNotConnected`, `SendErrorNotWriteable`) are ignored — mare can't do anything useful in either case.
 - **No integration tests in v1**: Unit tests cover parsing, encoding, and reassembly. Integration tests requiring TCP connections are deferred.

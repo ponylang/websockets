@@ -1,12 +1,12 @@
 """
 # Mare
 
-A WebSocket server library for Pony built on
+A WebSocket server for Pony built on
 [lori](https://github.com/ponylang/lori).
 
 ## Architecture
 
-The library follows lori's "your actor IS the connection" pattern:
+Mare follows lori's "your actor IS the connection" pattern:
 
 - A **listener actor** (`lori.TCPListenerActor`) accepts TCP connections.
   On each accept, it creates a new connection actor.
